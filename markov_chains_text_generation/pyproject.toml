@@ -10,6 +10,9 @@ python = "^3.7"
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 
+[tool.poetry.scripts]
+sandbox = "markov_chains_text_generation.sandbox:main"
+
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
