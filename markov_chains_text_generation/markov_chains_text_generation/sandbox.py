@@ -1,41 +1,23 @@
-import csv
+import nltk
 import itertools
-from collections import defaultdict
+from .markov_chain import MarkovChain
+from .dialogs import dialogs_in_csv
 
-def read_dialogs(csv_path):
-    with open(csv_path, 'r') as csv_file:
-        reader = csv.reader(csv_file, delimiter=',', quotechar='"')
-
-        return [row[3] for row in reader][1:]
-
-class MarkovChain:
-    def __init__(self):
-        self._rows = defaultdict(self._create_row)
-
-    def add_occurence(self, from_val, to_val):
-        self._rows[from_val][to_val] +=1
-
-    def items(self):
-        return self._rows.items();
-
-    def _create_row(_):
-        return defaultdict(lambda: 0)
-
-def print_occurences(dialogs):
-    dialog = dialogs[0]
-
-    chain = MarkovChain()
-
-    words = dialog.split()
-    for prev,curr in itertools.zip_longest(words, words[1:]):
-        chain.add_occurence(prev, curr)
-
-    for from_word,to_words in chain.items():
-        print('FROM WORD: ', from_word)
-        for to_word,count in to_words.items():
-            print("  ", to_word, " = ", count)
+def tokens(csv_path):
+    for dialog in dialogs_in_csv(csv_path):
+        for token in nltk.word_tokenize(dialog):
+            yield token
 
 def main():
     csv_path = "data/clean_dialog.csv"
-    dialogs = read_dialogs(csv_path)
-    print_occurences(dialogs)
+
+    iter_1 = tokens(csv_path)
+    iter_2 = tokens(csv_path)
+    iter_3 = tokens(csv_path)
+
+    next(iter_2)
+    next(iter_3)
+    next(iter_3)
+
+    for a,b,c in itertools.zip_longest(iter_1, iter_2, iter_3):
+        print("a,b,c", [a,b,c])
