@@ -4,6 +4,6 @@ Small machine learning playground to learn and test new ideas
 
 ## Topics:
 
-* [01 Markov Chains](./01_markov_chains/README.md)
+* [01 Markov Chains](./01_markov_chains/)
 
 
