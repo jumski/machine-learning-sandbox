@@ -21,9 +21,7 @@ class MarkovChain:
     def _create_row(_):
         return defaultdict(lambda: 0)
 
-def main():
-    csv_path = "data/clean_dialog.csv"
-    dialogs = read_dialogs(csv_path)
+def print_occurences(dialogs):
     dialog = dialogs[0]
 
     chain = MarkovChain()
@@ -36,5 +34,8 @@ def main():
         print('FROM WORD: ', from_word)
         for to_word,count in to_words.items():
             print("  ", to_word, " = ", count)
-        # for to_word,count in to_words:
-        #     print('.')
+
+def main():
+    csv_path = "data/clean_dialog.csv"
+    dialogs = read_dialogs(csv_path)
+    print_occurences(dialogs)
