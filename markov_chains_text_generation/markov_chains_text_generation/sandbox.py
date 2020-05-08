@@ -26,18 +26,17 @@ class MarkovChain2:
 
 def main():
     csv_file = open(csv_path, 'r')
-    chain = MarkovChain2()
 
-    # with open('data/markov.cache', 'rb') as cache:
-    #     try:
-    #         chain = pickle.load(cache)
-    #     except EOFError:
-    #         chain = MarkovChain2()
+    with open('data/markov.cache', 'rb') as cache:
+        try:
+            chain = pickle.load(cache)
+        except EOFError:
+            chain = MarkovChain2()
+
+    # for *from_tokens, to_token in csv_consecutive_tokens(csv_file, 3):
+    #     chain.add_transition(from_tokens, to_token)
+    print(chain.get_possibilities(['What', 'if']))
 
     # with open('data/markov.cache', 'wb') as cache:
     #     pickle.dump(chain, cache)
 
-    for *from_tokens, to_token in csv_consecutive_tokens(csv_file, 3):
-        chain.add_transition(from_tokens, to_token)
-
-    print(chain.get_possibilities(['What', 'if']))
