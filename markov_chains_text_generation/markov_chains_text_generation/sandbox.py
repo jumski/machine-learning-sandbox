@@ -1,17 +1,23 @@
-from collections import defaultdict
+import pickle
 from .data import csv_consecutive_tokens
 
 csv_path = 'data/clean_dialog.csv'
 
 class MarkovChain2:
     def __init__(self):
-        self.rows = defaultdict(lambda:
-                                defaultdict(lambda: 0))
+        self.rows = {}
 
     def add_transition(self, from_value, to_value):
         row_key = tuple(from_value)
 
-        self.rows[row_key][to_value] += 1
+        if row_key not in self.rows:
+            self.rows[row_key] = {}
+        row = self.rows[row_key]
+
+        if to_value not in row:
+            row[to_value] = 0
+
+        row[to_value] += 1
 
     def get_possibilities(self, from_value):
         row_key = tuple(from_value)
@@ -20,9 +26,18 @@ class MarkovChain2:
 
 def main():
     csv_file = open(csv_path, 'r')
-    markov_chain = MarkovChain2()
+    chain = MarkovChain2()
+
+    # with open('data/markov.cache', 'rb') as cache:
+    #     try:
+    #         chain = pickle.load(cache)
+    #     except EOFError:
+    #         chain = MarkovChain2()
+
+    # with open('data/markov.cache', 'wb') as cache:
+    #     pickle.dump(chain, cache)
 
     for *from_tokens, to_token in csv_consecutive_tokens(csv_file, 3):
-        markov_chain.add_transition(from_tokens, to_token)
+        chain.add_transition(from_tokens, to_token)
 
-    print(markov_chain.get_possibilities(['What', 'if']))
+    print(chain.get_possibilities(['What', 'if']))
