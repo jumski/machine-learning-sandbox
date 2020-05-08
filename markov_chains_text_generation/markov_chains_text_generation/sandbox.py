@@ -1,3 +1,4 @@
+import numpy
 import pickle
 from .data import csv_consecutive_tokens
 
@@ -24,7 +25,7 @@ class MarkovChain2:
 
         return self.rows[row_key]
 
-    def get_weights(self, from_value):
+    def get_weighted(self, from_value):
         row_key = tuple(from_value)
         row = self.rows[row_key]
 
@@ -36,6 +37,13 @@ class MarkovChain2:
 
         return weights
 
+    def generate_new_value(self, from_value):
+        weighted = self.get_weighted(from_value)
+
+        possibilities = list(weighted.keys())
+        weights = list(weighted.values())
+
+        return numpy.random.choice(possibilities, p=weights)
 
 def main():
     csv_file = open(csv_path, 'r')
@@ -49,8 +57,8 @@ def main():
     # for *from_tokens, to_token in csv_consecutive_tokens(csv_file, 3):
     #     chain.add_transition(from_tokens, to_token)
     # print(chain.get_possibilities(['What', 'if']))
-    weights = chain.get_weights(['What', 'if'])
-    print(weights)
+
+    print(chain.generate_new_value(['What', 'if']))
 
     # with open('data/markov.cache', 'wb') as cache:
     #     pickle.dump(chain, cache)
