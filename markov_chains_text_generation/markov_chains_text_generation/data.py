@@ -18,7 +18,7 @@ def consecutive(iterator, window = 2):
     Yields tuple of consecutive elements for given `iterator`.
     Number of consecutive elements is defined by `window`.
     """
-    previous = []
+    previous = [None for _ in range(window - 1)]
 
     for element in iterator:
         previous.append(element)

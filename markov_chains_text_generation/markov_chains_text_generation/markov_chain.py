@@ -16,11 +16,6 @@ class MarkovChain:
 
         row[to_value] += 1
 
-    def get_possibilities(self, from_value):
-        row_key = tuple(from_value)
-
-        return self.rows[row_key]
-
     def get_weighted(self, from_value):
         row_key = tuple(from_value)
         row = self.rows[row_key]
