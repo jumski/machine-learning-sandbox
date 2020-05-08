@@ -48,26 +48,31 @@ class MarkovChain2:
 
 def main():
     csv_file = open(csv_path, 'r')
+    window = 3
+    cache_path = "data/markov-{}.cache".format(window)
 
-    with open('data/markov.cache', 'rb') as cache:
-        try:
-            chain = pickle.load(cache)
-        except EOFError:
-            chain = MarkovChain2()
+    # with open(cache_path, 'rb') as cache:
+    #     try:
+    #         chain = pickle.load(cache)
+    #     except EOFError:
+    #         chain = MarkovChain2()
 
-    # for *from_tokens, to_token in csv_consecutive_tokens(csv_file, 3):
-    #     chain.add_transition(from_tokens, to_token)
-    # print(chain.get_possibilities(['What', 'if']))
+    chain = MarkovChain2()
+    print('Building markov chain...')
+    for *from_tokens, to_token in csv_consecutive_tokens(csv_file, window + 1):
+        chain.add_transition(from_tokens, to_token)
 
-    sentence = ['What', 'if']
+    sentence = ['What', 'if', 'you']
+    # sentence = ['find', 'me', 'that', 'old', 'copy', 'of', 'Predictions']
 
+    print()
     for i in range(500):
-        input_tokens = sentence[-2:]
+        input_tokens = sentence[-window:]
         new_token = chain.generate_new_value(input_tokens)
         sentence.append(new_token)
 
     print(TreebankWordDetokenizer().detokenize(sentence))
 
-    # with open('data/markov.cache', 'wb') as cache:
+    # with open(cache_path, 'wb') as cache:
     #     pickle.dump(chain, cache)
 
