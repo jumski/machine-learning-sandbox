@@ -5,16 +5,25 @@ from .markov_chain import MarkovChain
 from .data import consecutive
 from .dialogs import read_dialogs
 
+def create_chain(*_):
+    return MarkovChain()
+
 def train_chain(chain, text, window=3):
     for *from_tokens, to_token in consecutive(nltk.word_tokenize(text), window + 1):
         chain.add_transition(from_tokens, to_token)
 
-def create_markov_chain(*_):
-    return MarkovChain()
+def train_on_all(csv_path):
+    dialogs = read_dialogs(csv_path)
+    chain = create_chain()
+
+    for *_, text in dialogs:
+        train_chain(chain, text)
+
+    return chain
 
 def train_by_pony(csv_path):
     dialogs = read_dialogs(csv_path)
-    chains = defaultdict(create_markov_chain)
+    chains = defaultdict(create_chain)
 
     for *_, pony, text in dialogs:
         chains[pony] = chains[pony] or MarkovChain()

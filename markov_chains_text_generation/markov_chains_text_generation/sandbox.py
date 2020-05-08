@@ -1,6 +1,6 @@
 import random
 from nltk.tokenize.treebank import TreebankWordDetokenizer
-from .training import train_by_pony, train_author_order
+from .training import train_by_pony, train_author_order, train_on_all
 
 def is_terminated(sentence):
     return sentence[-1] in set(['.', '?', '!'])
@@ -20,12 +20,14 @@ def generate_sentence(chain):
 def main():
     csv_path = 'data/clean_dialog.csv'
     dialogs_chains = train_by_pony(csv_path)
+    chain = train_on_all(csv_path)
     author_order_chain = train_author_order(csv_path)
 
     author = random.choice(list(author_order_chain.rows.keys()))
     for _ in range(15):
         author = author_order_chain.generate_new_value(author)
-        sentence = generate_sentence(dialogs_chains[author])
+        # sentence = generate_sentence(chain)
+        sentence = generate_sentence(dialogs_chain[author])
 
         dialog_line = "{}: {}".format(author.upper(), sentence)
 
