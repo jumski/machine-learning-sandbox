@@ -15,7 +15,7 @@ def csv_tokens(csv_file):
 
 def consecutive(iterator, window = 2):
     """
-    Yields list of consecutive elements for given `iterator`.
+    Yields tuple of consecutive elements for given `iterator`.
     Number of consecutive elements is defined by `window`.
     """
     previous = []
