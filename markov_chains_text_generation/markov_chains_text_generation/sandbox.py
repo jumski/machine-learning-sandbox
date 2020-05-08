@@ -24,6 +24,19 @@ class MarkovChain2:
 
         return self.rows[row_key]
 
+    def get_weights(self, from_value):
+        row_key = tuple(from_value)
+        row = self.rows[row_key]
+
+        total = sum(row.values())
+        weights = {}
+
+        for to_value in row:
+            weights[to_value] = row[to_value] / total
+
+        return weights
+
+
 def main():
     csv_file = open(csv_path, 'r')
 
@@ -35,7 +48,9 @@ def main():
 
     # for *from_tokens, to_token in csv_consecutive_tokens(csv_file, 3):
     #     chain.add_transition(from_tokens, to_token)
-    print(chain.get_possibilities(['What', 'if']))
+    # print(chain.get_possibilities(['What', 'if']))
+    weights = chain.get_weights(['What', 'if'])
+    print(weights)
 
     # with open('data/markov.cache', 'wb') as cache:
     #     pickle.dump(chain, cache)
