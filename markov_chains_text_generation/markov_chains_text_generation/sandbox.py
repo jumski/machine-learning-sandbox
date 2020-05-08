@@ -1,6 +1,7 @@
 import numpy
 import pickle
 from .data import csv_consecutive_tokens
+from nltk.tokenize.treebank import TreebankWordDetokenizer
 
 csv_path = 'data/clean_dialog.csv'
 
@@ -58,7 +59,14 @@ def main():
     #     chain.add_transition(from_tokens, to_token)
     # print(chain.get_possibilities(['What', 'if']))
 
-    print(chain.generate_new_value(['What', 'if']))
+    sentence = ['What', 'if']
+
+    for i in range(500):
+        input_tokens = sentence[-2:]
+        new_token = chain.generate_new_value(input_tokens)
+        sentence.append(new_token)
+
+    print(TreebankWordDetokenizer().detokenize(sentence))
 
     # with open('data/markov.cache', 'wb') as cache:
     #     pickle.dump(chain, cache)
