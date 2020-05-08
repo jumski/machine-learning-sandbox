@@ -22,7 +22,7 @@ def train_by_pony(csv_path):
 
     return chains
 
-def train_participant_order(csv_path):
+def train_author_order(csv_path):
     dialogs = read_dialogs(csv_path)
     chain = MarkovChain()
 
@@ -30,7 +30,8 @@ def train_participant_order(csv_path):
 
     for title_name, title_dialogs in itertools.groupby(dialogs, key_fn):
         for cons_dialogs in consecutive(title_dialogs, 2):
-            participants = [d[2] for d in cons_dialogs]
-            chain.add_transition(*participants)
+            if cons_dialogs[0] != None:
+                participants = [d[2] for d in cons_dialogs]
+                chain.add_transition(*participants)
 
     return chain
